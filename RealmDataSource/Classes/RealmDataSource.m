@@ -3,7 +3,6 @@
 //
 
 #import "RealmDataSource.h"
-#import "Validator.h"
 
 @implementation RealmBaseObject
 
@@ -102,7 +101,6 @@
         
         for (RealmBaseObject *item in array) {
             item.refCount = 1;
-            [[Validator validator] validate:item];
             
             [self.realm addOrUpdateObject:item];
         }
