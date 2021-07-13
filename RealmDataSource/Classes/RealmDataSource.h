@@ -10,9 +10,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RealmBaseObject : RLMObject
 
-@property int uid;
-@property int refCount;
-@property int loginid;
+@property NSString  *uid;
+@property int       refCount;
+@property NSString  *loginid;
+@property NSDate    *date;
 
 @end
 
