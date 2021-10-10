@@ -14,7 +14,7 @@
 
 @interface RealmDataSource ()
 
-@property (nonatomic, strong) RLMRealm  *realm;
+@property (nonatomic, strong) RLMRealm              *realm;
 @property (nonatomic, strong) NSMutableDictionary   *dicWatch;
 
 @end
@@ -28,18 +28,16 @@
 
 - (instancetype)init {
     if (self = [super init]) {
+        self.dicWatch = @{}.mutableCopy;
+        
         RLMRealmConfiguration *config = [RLMRealmConfiguration defaultConfiguration];
         config.deleteRealmIfMigrationNeeded = YES;
         [RLMRealmConfiguration setDefaultConfiguration:config];
         
-        self.dicWatch = @{}.mutableCopy;
+        self.realm = [RLMRealm defaultRealm];
     }
     
     return self;
-}
-
-- (RLMRealm *)realm {
-    return [RLMRealm defaultRealm];
 }
 
 - (void)watchWithClassName:(NSString *)className
@@ -105,14 +103,16 @@
             [self.realm addOrUpdateObject:item];
         }
         
-        RLMResults *results = RLMGetObjects(self.realm, objectClassName, [NSPredicate predicateWithFormat:@"refCount == 0"]);
-        for (RealmBaseObject *item in results) {
-            [self.realm deleteObject:item];
+        if (objectClassName) {
+            RLMResults *results = RLMGetObjects(self.realm, objectClassName, [NSPredicate predicateWithFormat:@"refCount == 0"]);
+            for (RealmBaseObject *item in results) {
+                [self.realm deleteObject:item];
+            }
         }
     }];
 }
 
-- (void)deleteObjects:(NSArray<RealmBaseObject *> *)array {
+- (void)deleteObjects:(id)array {
     [self.realm transactionWithBlock:^{
         [self.realm deleteObjects:array];
     }];

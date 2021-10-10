@@ -42,7 +42,7 @@ typedef void (^RLMNotifyBlock)(RLMResults * _Nullable data);
            syncAll:(BOOL)syncAll
          predicate:(nullable NSPredicate *)predicate;
 
-- (void)deleteObjects:(NSArray<RealmBaseObject *> *)array;
+- (void)deleteObjects:(id)array;
 
 @end
 
